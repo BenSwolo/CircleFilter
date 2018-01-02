@@ -60,13 +60,3 @@ void	my_putline(int x0, int y0, int x1, int y1,
     if (e2 < dy) { err += dx; y0 += sy; }
   }   
 }
-
-void	my_putfullcircle(int x0, int y0, int radius,
-			 t_my_pixel new_pixel, t_my_pixel *pixel_array,
-			 int width, int height)
-{
-  //intf("pos:%d,%d radius:%d, color:%d,%d,%d\n", x0, y0, radius,
-  //	 new_pixel.red, new_pixel.green, new_pixel.blue);
-  for (int i = 0; i <= radius; i++)
-    my_putcircle(x0, y0, i, new_pixel, pixel_array, width, height);
-}
