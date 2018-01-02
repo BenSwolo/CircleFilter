@@ -18,12 +18,12 @@ int	main(int ac, char **av)
   unsigned int		tmp;
   int			width, height;
   int			fd;
-  unsigned int		red, green, blue;
   t_list		*colors;
   int			nb_bytes;
   
   if (ac == 1)
     return (0);
+  printf("reading bmp file...\n");
   header = read_header(av[1]);
   if (!header)
     return (1);
@@ -34,26 +34,20 @@ int	main(int ac, char **av)
   width = info->width;
   height = info->height;
   nb_bytes = info->bytes_per_pixel;
-  printf("size: %d %d, format: %dbits\n", width, height, nb_bytes);
-
   pixel_array = read_pixel_array(offset, av[1], width, height, nb_bytes);
-  for (int i = 0; i < width * height; i++)
-    {
-      red = pixel_array[i].red;
-      green = pixel_array[i].green;
-      blue = pixel_array[i].blue;
-      printf("color: %u %u %u\n", red, green, blue);
-      }
   colors = get_colors(pixel_array, width, height);
+  printf("putting little circles on the picture...\n");
   pixel_array = my_filter(pixel_array, colors, width, height);
   if (pixel_array)
     {
       fd = open(av[1], O_RDWR);
       for (int i= 0; i < offset; i++)
 	read(fd, &tmp, 1);
+      printf("Overwriting file...\n");
       write_pixel_array(fd, pixel_array, width, height, nb_bytes);
       close(fd);
-    }
+      printf("Done.\n");  
+  }
   free(header);
   free(info);
   free(pixel_array);
